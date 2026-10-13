@@ -1,0 +1,24 @@
+# Local MySQL for running the app on your machine.
+# Same major version as the RDS database on AWS (8.4).
+# These credentials are for local development only.
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: java-login-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: localroot
+      MYSQL_DATABASE: UserDB
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: localpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  mysql-data:
